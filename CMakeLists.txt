@@ -102,7 +102,7 @@ add_executable(example
 )
 set_target_properties(example PROPERTIES CXX_STANDARD 17)
 
-target_link_libraries(example imath)  # cxxopts nlohmann_json spdlog tomlplusplus
+target_link_libraries(example Imath::Imath)  # cxxopts nlohmann_json spdlog tomlplusplus
 
 # ---- Enable testing ----
 
