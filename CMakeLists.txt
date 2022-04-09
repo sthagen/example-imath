@@ -2,21 +2,13 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 # ---- Project ----
 
-project(airborne LANGUAGES CXX)
+project(example-imath LANGUAGES CXX)
 
 # ---- Enable FetchContent ----
 
 include(FetchContent)
 
 # ---- Add dependencies via FetchContent ----
-
-#FetchContent_Declare(
-#        simdjson
-#        GIT_REPOSITORY https://github.com/simdjson/simdjson.git
-#        GIT_TAG v0.9.5
-#        GIT_SHALLOW TRUE)
-#
-#FetchContent_MakeAvailable(simdjson)
 
 # ---- Fetch CPM ----
 set(CPM_DOWNLOAD_VERSION 0.35.0)
@@ -41,6 +33,20 @@ include(${CPM_DOWNLOAD_LOCATION})
 
 # ---- Add dependencies via CPM ----
 # See https://github.com/cpm-cmake/CPM.cmake for details and examples
+
+CPMAddPackage(
+        NAME imath
+        GITHUB_REPOSITORY AcademySoftwareFoundation/Imath
+        GIT_TAG v3.1.5
+        OPTIONS
+        "IMATH_CXX_STANDARD 17"
+)
+
+if(imath_ADDED)
+    add_library(imath INTERFACE)
+    target_include_directories(imath INTERFACE ${imath_SOURCE_DIR}/src/)
+    message("-- [example-imath] added ${imath_SOURCE_DIR}/src/ as include")
+endif()
 
 CPMAddPackage(
         NAME doctest
@@ -87,10 +93,16 @@ CPMAddPackage(
 if(tomlplusplus_ADDED)
     add_library(tomlplusplus INTERFACE)
     target_include_directories(tomlplusplus INTERFACE ${tomlplusplus_SOURCE_DIR}/include/)
-    message("-- [airborne] added ${tomlplusplus_SOURCE_DIR}/include/ as include")
+    message("-- [example-imath] added ${tomlplusplus_SOURCE_DIR}/include/ as include")
 endif()
 
 # ---- Create tool binary ----
+add_executable(example
+        example/main.cpp
+)
+set_target_properties(example PROPERTIES CXX_STANDARD 17)
+
+target_link_libraries(example imath)  # cxxopts nlohmann_json spdlog tomlplusplus
 
 # ---- Enable testing ----
 
