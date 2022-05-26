@@ -51,6 +51,8 @@ if(imath_ADDED)
     message("-- [example-imath] added ${imath_SOURCE_DIR}/src/ as include")
 endif()
 
+# ---- YAGNI ---- maybe ----
+
 CPMAddPackage(
         NAME doctest
         GITHUB_REPOSITORY sthagen/doctest-doctest
